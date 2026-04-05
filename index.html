@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>買取価格検索</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      background: #f2f2f2;
+      min-height: 100vh;
+      color: #1a1a2e;
+    }
+
+    /* ヘッダー */
+    .header {
+      background: #1a1a2e;
+      padding: 18px 24px 14px;
+      display: flex;
+      align-items: center;
+      border-bottom: 3px solid #e63946;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      letter-spacing: 3px;
+      color: #fff;
+      line-height: 1;
+    }
+    .header-sub { font-size: 11px; color: #aaa; margin-top: 3px; letter-spacing: 1px; }
+    .badge {
+      background: #e63946;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 3px;
+      margin-left: auto;
+      letter-spacing: 1px;
+    }
+
+    /* 検索エリア */
+    .search-area {
+      background: #fff;
+      border-bottom: 1px solid #e0e0e0;
+      padding: 16px 24px;
+      position: sticky;
+      top: 65px;
+      z-index: 99;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .search-wrap { position: relative; max-width: 700px; margin: 0 auto; }
+    .search-input {
+      width: 100%;
+      height: 46px;
+      padding: 0 50px 0 16px;
+      border: 2px solid #1a1a2e;
+      border-radius: 10px;
+      font-size: 15px;
+      font-family: 'Noto Sans JP', sans-serif;
+      background: #fff;
+      outline: none;
+      transition: border-color 0.2s;
+      color: #1a1a2e;
+    }
+    .search-input:focus { border-color: #e63946; }
+    .search-input::placeholder { color: #bbb; }
+    .search-ico {
+      position: absolute;
+      right: 16px; top: 50%;
+      transform: translateY(-50%);
+      width: 20px; height: 20px;
+      opacity: 0.3; pointer-events: none;
+    }
+
+    /* ステータスバー */
+    .status-bar {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 10px 24px 4px;
+      font-size: 12px;
+      color: #888;
+      min-height: 30px;
+    }
+    .status-bar b { color: #e63946; font-weight: 700; }
+
+    /* カードグリッド */
+    .results {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 8px 16px 40px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 12px;
+    }
+
+    .card {
+      background: #fff;
+      border: 1px solid #e8e8e8;
+      border-radius: 12px;
+      overflow: hidden;
+      transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
+      cursor: default;
+    }
+    .card:hover {
+      border-color: #e63946;
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(230, 57, 70, 0.12);
+    }
+
+    .card-body { padding: 13px 14px 14px; }
+    .card-number {
+      font-size: 10px;
+      color: #fff;
+      background: #1a1a2e;
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-bottom: 8px;
+      letter-spacing: 0.5px;
+      font-family: monospace;
+    }
+    .card-name {
+      font-size: 13px;
+      font-weight: 500;
+      color: #1a1a2e;
+      margin-bottom: 12px;
+      line-height: 1.55;
+      min-height: 40px;
+    }
+    .price-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #fff4f4;
+      border: 1px solid #fdd;
+      border-radius: 7px;
+      padding: 8px 12px;
+    }
+    .price-label { font-size: 11px; color: #e63946; font-weight: 500; }
+    .price-value { font-size: 21px; font-weight: 700; color: #e63946; line-height: 1; }
+    .price-yen { font-size: 13px; margin-right: 1px; }
+    .price-none { font-size: 15px; color: #ccc; }
+
+    /* ローディング */
+    .loading {
+      grid-column: 1/-1;
+      text-align: center;
+      padding: 80px 20px;
+      color: #888;
+      font-size: 14px;
+    }
+    .spinner {
+      width: 36px; height: 36px;
+      border: 3px solid #eee;
+      border-top-color: #e63946;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      margin: 0 auto 16px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* エラー */
+    .error-msg {
+      grid-column: 1/-1;
+      background: #fff4f4;
+      border: 1px solid #fdd;
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin: 8px;
+      font-size: 14px;
+      color: #c00;
+      line-height: 1.8;
+    }
+
+    /* 空 */
+    .empty {
+      grid-column: 1/-1;
+      text-align: center;
+      padding: 80px 20px;
+      color: #aaa;
+      font-size: 14px;
+    }
+
+    /* もっと見る */
+    .more-wrap {
+      grid-column: 1/-1;
+      text-align: center;
+      padding: 12px 0 20px;
+    }
+    .more-btn {
+      background: #1a1a2e;
+      color: #fff;
+      border: none;
+      padding: 12px 32px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: 'Noto Sans JP', sans-serif;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .more-btn:hover { background: #e63946; }
+
+    mark {
+      background: #ffe066;
+      border-radius: 2px;
+      padding: 0 1px;
+    }
+
+    @media (max-width: 600px) {
+      .header-title { font-size: 22px; }
+      .results { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 8px; padding: 8px 8px 40px; }
+      .search-area { padding: 12px 12px; top: 58px; }
+      .status-bar { padding: 8px 12px 4px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div>
+      <div class="header-title">CARD BUYBACK SEARCH</div>
+      <div class="header-sub">買取価格検索システム</div>
+    </div>
+    <div class="badge">買取中</div>
+  </div>
+
+  <div class="search-area">
+    <div class="search-wrap">
+      <input class="search-input" id="q" type="text"
+        placeholder="カード名・型番で検索... 例：ピカチュウ / 007/025"
+        oninput="doSearch()">
+      <svg class="search-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+    </div>
+  </div>
+
+  <div class="status-bar" id="status">データを読み込み中...</div>
+  <div class="results" id="results">
+    <div class="loading">
+      <div class="spinner"></div>
+      スプレッドシートからデータを取得中...
+    </div>
+  </div>
+
+  <script>
+    const GAS_URL = 'https://script.google.com/macros/s/AKfycbz_92mbGgtogLtLbuFSQERlM7AmCyIj1KRRk66d3PQq_Q-_Mu4XrWDmE9vVDQnBQX2E/exec';
+
+    let allCards = [];
+    let filtered = [];
+    let displayCount = 100;
+
+    function formatPrice(str) {
+      if (!str || str === 'null' || str === '') return null;
+      const n = parseInt(String(str).replace(/[^0-9]/g, ''));
+      if (isNaN(n) || n === 0) return null;
+      return n.toLocaleString();
+    }
+
+    function highlight(text, q) {
+      if (!q) return text;
+      const esc = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      return text.replace(new RegExp(`(${esc})`, 'gi'), '<mark>$1</mark>');
+    }
+
+    async function loadData() {
+      try {
+        const res = await fetch(GAS_URL);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        allCards = data
+          .map(r => ({
+            name:   String(r.name   || '').trim(),
+            price:  formatPrice(r.price),
+            number: String(r.number || '').trim()
+          }))
+          .filter(c => c.name);
+        document.getElementById('status').innerHTML =
+          `全 <b>${allCards.length.toLocaleString()}</b> 件のカードを読み込みました`;
+        doSearch();
+      } catch (e) {
+        document.getElementById('results').innerHTML =
+          `<div class="error-msg">❌ データの読み込みに失敗しました。<br>エラー: ${e.message}</div>`;
+        document.getElementById('status').textContent = '読み込みエラー';
+      }
+    }
+
+    function doSearch() {
+      const q = document.getElementById('q').value.toLowerCase().trim();
+      displayCount = 100;
+      filtered = q
+        ? allCards.filter(c =>
+            c.name.toLowerCase().includes(q) ||
+            c.number.toLowerCase().includes(q))
+        : allCards;
+      document.getElementById('status').innerHTML = q
+        ? `"${q}" の検索結果：<b>${filtered.length.toLocaleString()}</b> 件`
+        : `全 <b>${allCards.length.toLocaleString()}</b> 件のカードを読み込みました`;
+      renderCards(q);
+    }
+
+    function renderCards(q) {
+      const el = document.getElementById('results');
+      if (!filtered.length) {
+        el.innerHTML = '<div class="empty">該当するカードが見つかりませんでした</div>';
+        return;
+      }
+      const slice = filtered.slice(0, displayCount);
+      el.innerHTML = slice.map(c => `
+        <div class="card">
+          <div class="card-body">
+            ${c.number ? `<div class="card-number">${highlight(c.number, q)}</div>` : ''}
+            <div class="card-name">${highlight(c.name, q)}</div>
+            <div class="price-box">
+              <div class="price-label">買取価格</div>
+              <div class="price-value">
+                ${c.price
+                  ? `<span class="price-yen">¥</span>${c.price}`
+                  : `<span class="price-none">—</span>`}
+              </div>
+            </div>
+          </div>
+        </div>`).join('') +
+        (filtered.length > displayCount
+          ? `<div class="more-wrap"><button class="more-btn" onclick="loadMore()">さらに表示（残り ${(filtered.length - displayCount).toLocaleString()} 件）</button></div>`
+          : '');
+    }
+
+    function loadMore() {
+      displayCount += 100;
+      renderCards(document.getElementById('q').value.toLowerCase().trim());
+    }
+
+    loadData();
+  </script>
+</body>
+</html>
