@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>買取価格検索 | トレカデイズ</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: 'Noto Sans JP', sans-serif; background: #fdf6ee; min-height: 100vh; color: #2a1a0e; }
@@ -13,26 +13,36 @@
     /* ヘッダー */
     .header {
       background: #f26a00;
-      padding: 18px 40px 15px;
+      padding: 12px 40px;
       display: flex; align-items: center;
       border-bottom: 3px solid #c45200;
       position: sticky; top: 0; z-index: 100;
     }
-    .header-logo { display: flex; flex-direction: column; gap: 4px; }
-    .header-title {
-      font-family: 'Shippori Mincho', serif;
-      font-size: 26px; font-weight: 700;
-      color: #fff; letter-spacing: 6px; line-height: 1;
+    .header-logo-wrap {
+      display: flex; align-items: center; gap: 14px;
     }
-    .header-sub { font-size: 11px; color: rgba(255,255,255,0.8); letter-spacing: 2px; font-weight: 300; }
-    .badge { margin-left: auto; background: #fff; color: #f26a00; font-size: 10px; font-weight: 700; padding: 5px 14px; border-radius: 2px; letter-spacing: 2px; }
+    .header-logo-img {
+      width: 52px; height: 52px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: #fff;
+      flex-shrink: 0;
+      display: block;
+    }
+    .header-logo-text { display: flex; flex-direction: column; gap: 2px; }
+    .header-title {
+      font-size: 20px; font-weight: 700;
+      color: #fff; letter-spacing: 3px; line-height: 1;
+    }
+    .header-sub { font-size: 10px; color: rgba(255,255,255,0.8); letter-spacing: 2px; font-weight: 300; }
+    .badge { margin-left: auto; background: #fff; color: #f26a00; font-size: 10px; font-weight: 700; padding: 5px 14px; border-radius: 2px; letter-spacing: 2px; flex-shrink: 0; }
 
     /* 検索エリア */
     .search-area {
       background: #fff;
       border-bottom: 2px solid #f5dfc8;
       padding: 16px 40px;
-      position: sticky; top: 72px; z-index: 99;
+      position: sticky; top: 79px; z-index: 99;
       box-shadow: 0 4px 16px rgba(242,106,0,0.07);
     }
     .search-row { display: flex; align-items: center; gap: 20px; max-width: 960px; margin: 0 auto; }
@@ -73,38 +83,30 @@
       padding: 12px 16px;
       border-bottom: 1px solid #f5ece0;
       transition: background 0.15s;
-      gap: 0;
     }
     .list-item:hover { background: #fff8f2; }
 
-    /* 画像エリア */
     .item-img {
       width: 56px; height: 78px;
       background: #f5ece0;
       border-radius: 4px;
       border: 1px solid #f0dcc8;
       display: flex; align-items: center; justify-content: center;
-      overflow: hidden;
-      flex-shrink: 0;
+      overflow: hidden; flex-shrink: 0;
     }
     .item-img img { width: 100%; height: 100%; object-fit: cover; border-radius: 4px; }
-    .item-img-placeholder {
-      font-size: 9px; color: #d4b090; text-align: center; line-height: 1.4; font-weight: 300; letter-spacing: 0.5px;
-    }
+    .item-img-placeholder { font-size: 9px; color: #d4b090; text-align: center; line-height: 1.4; font-weight: 300; }
 
-    /* カード情報 */
     .item-info { padding: 0 16px; }
-    .item-name { font-size: 14px; font-weight: 500; color: #2a1a0e; line-height: 1.55; letter-spacing: 0.3px; margin-bottom: 5px; }
+    .item-name { font-size: 14px; font-weight: 500; color: #2a1a0e; line-height: 1.55; margin-bottom: 5px; }
     .item-number { font-size: 11px; color: #f26a00; font-family: monospace; letter-spacing: 0.5px; font-weight: 300; }
 
-    /* 価格 */
     .item-price-wrap { text-align: right; }
     .item-price-label { font-size: 10px; color: #c8a070; letter-spacing: 1px; font-weight: 300; margin-bottom: 3px; }
     .item-price { font-size: 22px; font-weight: 700; color: #f26a00; line-height: 1; letter-spacing: -0.5px; }
     .item-price-yen { font-size: 13px; font-weight: 500; margin-right: 1px; }
     .item-price-none { font-size: 14px; color: #ddd; font-weight: 300; }
 
-    /* アイドル・ローディング */
     .idle-msg { text-align: center; padding: 100px 20px 80px; }
     .idle-icon { width: 52px; height: 52px; display: block; margin: 0 auto 20px; opacity: 0.2; }
     .idle-msg p { font-size: 13px; color: #c8a070; font-weight: 300; letter-spacing: 2px; }
@@ -123,9 +125,10 @@
     mark { background: rgba(242,106,0,0.12); color: #c45200; border-radius: 2px; padding: 0 1px; }
 
     @media (max-width: 640px) {
-      .header { padding: 14px 20px; }
-      .header-title { font-size: 20px; letter-spacing: 4px; }
-      .search-area { padding: 12px 16px; top: 64px; }
+      .header { padding: 10px 16px; }
+      .header-logo-img { width: 40px; height: 40px; }
+      .header-title { font-size: 16px; letter-spacing: 2px; }
+      .search-area { padding: 12px 16px; top: 68px; }
       .status-bar { padding: 10px 16px 4px; }
       .list-wrap { padding: 0 8px 40px; }
       .list-header { grid-template-columns: 56px 1fr 100px; }
@@ -140,9 +143,12 @@
 <body>
 
   <div class="header">
-    <div class="header-logo">
-      <div class="header-title">トレカデイズ</div>
-      <div class="header-sub">買取価格検索</div>
+    <div class="header-logo-wrap">
+      <img class="header-logo-img" src="Avatar__1_.png" alt="トレカデイズ">
+      <div class="header-logo-text">
+        <div class="header-title">トレカデイズ</div>
+        <div class="header-sub">買取価格検索</div>
+      </div>
     </div>
     <div class="badge">買 取 中</div>
   </div>
@@ -255,7 +261,7 @@
 
       const rows = filtered.slice(0, displayCount).map(function(c) {
         const imgHtml = c.image
-          ? '<img src="' + c.image + '" alt="' + c.name + '" onerror="this.parentNode.innerHTML=\'<div class=item-img-placeholder>NO<br>IMAGE</div>\'">'
+          ? '<img src="' + c.image + '" alt="' + c.name + '" onerror="this.parentNode.innerHTML=\'<div class=\\\"item-img-placeholder\\\">NO<br>IMAGE</div>\'">'
           : '<div class="item-img-placeholder">NO<br>IMAGE</div>';
 
         return '<div class="list-item">' +
