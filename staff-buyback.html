@@ -13,8 +13,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
 .hdr-title{font-size:16px;font-weight:600;color:#1a1a1a}
 .badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:6px;background:#FBEAF0;color:#72243E;border:0.5px solid #F4C0D1;margin-left:6px}
 .clk{font-size:13px;color:#888}
+.cache-bar{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;font-size:13px;margin-bottom:1rem;border:0.5px solid #e0ddd6}
+.cache-bar.loading{background:#fff8e1;border-color:#ffe082;color:#f57f17}
+.cache-bar.ok{background:#e8f5e9;border-color:#a5d6a7;color:#2e7d32}
+.cache-bar.error{background:#fff0f0;border-color:#ffcdd2;color:#c62828}
+.cache-count{font-weight:700;margin:0 2px}
+.reload-btn{margin-left:auto;padding:5px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;border:0.5px solid currentColor;background:transparent;color:inherit;white-space:nowrap}
 .steps{display:flex;margin-bottom:1rem;border-radius:10px;overflow:hidden;border:0.5px solid #e0ddd6}
-.step{flex:1;padding:10px 4px;text-align:center;font-size:12px;color:#aaa;background:#f5f4f0;border-right:0.5px solid #e0ddd6;transition:all 0.2s}
+.step{flex:1;padding:10px 4px;text-align:center;font-size:12px;color:#aaa;background:#f5f4f0;border-right:0.5px solid #e0ddd6}
 .step:last-child{border-right:none}
 .step.active{background:#FBEAF0;color:#72243E;font-weight:600}
 .step.done{background:#e8f5e9;color:#2e7d32}
@@ -24,20 +30,17 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
 .search-row input{flex:1;font-size:16px;padding:11px 14px;border:0.5px solid #d0cdc6;border-radius:10px;outline:none;background:#fafaf8;color:#1a1a1a}
 .search-row input:focus{border-color:#993556;background:#fff}
 .btn-clear{padding:11px 16px;border-radius:10px;background:#f5f4f0;color:#444;border:0.5px solid #d0cdc6;font-size:14px;cursor:pointer}
-.status{padding:10px 12px;border-radius:8px;font-size:13px;margin-top:8px;display:none}
-.status.loading{display:block;background:#f5f4f0;color:#888}
-.status.error{display:block;background:#fff0f0;color:#c62828;border:0.5px solid #ffcdd2}
 .rw{border:0.5px solid #e0ddd6;border-radius:10px;max-height:260px;overflow-y:auto;margin-top:8px}
-.ri{display:flex;align-items:center;padding:11px 14px;border-bottom:0.5px solid #f0ede6;gap:10px;cursor:pointer;transition:background 0.15s}
+.ri{display:flex;align-items:center;padding:11px 14px;border-bottom:0.5px solid #f0ede6;gap:10px}
 .ri:last-child{border-bottom:none}
 .ri:hover{background:#faf8f5}
-.ri:active{background:#FBEAF0}
 .rn{font-size:14px;font-weight:600;color:#1a1a1a;flex:1}
 .rc{font-size:12px;color:#aaa;margin-top:2px}
 .rp{font-size:15px;font-weight:700;color:#993556;white-space:nowrap}
 .ab{font-size:13px;padding:8px 16px;border-radius:8px;background:#993556;color:#fff;border:none;cursor:pointer;white-space:nowrap;flex-shrink:0;font-weight:600}
 .ab:active{background:#72243E;transform:scale(0.97)}
 .empty{text-align:center;padding:36px;color:#bbb;font-size:14px}
+.no-result{padding:16px;font-size:14px;color:#bbb;text-align:center}
 .ci{border:0.5px solid #e0ddd6;border-radius:12px;margin-bottom:10px;overflow:hidden}
 .ci-top{display:flex;align-items:center;gap:10px;padding:10px 14px;background:#faf8f5;border-bottom:0.5px solid #f0ede6}
 .ci-nm{font-size:14px;font-weight:600;color:#1a1a1a;flex:1;line-height:1.4}
@@ -47,11 +50,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
 .cf{display:flex;flex-direction:column;gap:6px}
 .cf label{font-size:11px;color:#aaa;font-weight:600;text-transform:uppercase;letter-spacing:0.05em}
 .cond-btns{display:flex;gap:5px}
-.cb{padding:8px 12px;border-radius:8px;border:0.5px solid #d0cdc6;background:#fff;color:#666;font-size:13px;cursor:pointer;min-width:44px;text-align:center;font-weight:500;transition:all 0.15s}
+.cb{padding:8px 12px;border-radius:8px;border:0.5px solid #d0cdc6;background:#fff;color:#666;font-size:13px;cursor:pointer;min-width:44px;text-align:center;font-weight:500}
 .cb.on{background:#993556;color:#fff;border-color:#993556;font-weight:700}
 .cb:active{transform:scale(0.95)}
 .qc{display:flex;align-items:center;gap:10px}
-.qb{width:32px;height:32px;border-radius:50%;border:0.5px solid #d0cdc6;background:#fff;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;color:#444;font-weight:500}
+.qb{width:32px;height:32px;border-radius:50%;border:0.5px solid #d0cdc6;background:#fff;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;color:#444}
 .qb:active{background:#f0ede6;transform:scale(0.95)}
 .qn{font-size:16px;min-width:26px;text-align:center;font-weight:700;color:#1a1a1a}
 .price-wrap{display:flex;align-items:center;gap:6px}
@@ -75,7 +78,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
 .btn-sub{padding:12px 24px;border-radius:10px;background:#f5f4f0;color:#444;border:0.5px solid #d0cdc6;font-size:15px;cursor:pointer;font-weight:500}
 .btn-sub:active{background:#e8e6e0}
 .ct{width:100%;border-collapse:collapse;font-size:13px;table-layout:fixed}
-.ct th{text-align:left;font-weight:500;color:#aaa;padding:8px 8px;border-bottom:0.5px solid #f0ede6;font-size:12px}
+.ct th{text-align:left;font-weight:500;color:#aaa;padding:8px;border-bottom:0.5px solid #f0ede6;font-size:12px}
 .ct td{padding:10px 8px;border-bottom:0.5px solid #f0ede6;color:#1a1a1a;vertical-align:top;word-break:break-word}
 .ct tr:last-child td{border-bottom:none}
 .cond-badge{display:inline-block;padding:3px 10px;border-radius:6px;background:#FBEAF0;color:#72243E;font-size:12px;border:0.5px solid #F4C0D1;font-weight:700}
@@ -97,7 +100,6 @@ canvas#sc{display:block;touch-action:none;cursor:crosshair;width:100%;height:200
 </head>
 <body>
 <div class="app">
-
   <div class="hdr">
     <div class="logo">TD</div>
     <div>
@@ -108,6 +110,11 @@ canvas#sc{display:block;touch-action:none;cursor:crosshair;width:100%;height:200
     </div>
   </div>
 
+  <div id="cacheBar" class="cache-bar loading">
+    <span id="cacheMsg">カードデータを読み込み中...</span>
+    <button class="reload-btn" onclick="loadAllProducts(true)">再読み込み</button>
+  </div>
+
   <div class="steps">
     <div class="step active" id="st1">① カード選択</div>
     <div class="step" id="st2">② 内容確認</div>
@@ -115,18 +122,15 @@ canvas#sc{display:block;touch-action:none;cursor:crosshair;width:100%;height:200
     <div class="step" id="st4">④ 完了・印刷</div>
   </div>
 
-  <!-- PAGE 1 -->
   <div id="pg1">
     <div class="panel">
       <div class="sl">カード検索</div>
       <div class="search-row">
-        <input type="text" id="sq" placeholder="カード名・型番で検索..." oninput="onSearch()" autocomplete="off">
+        <input type="text" id="sq" placeholder="カード名・型番で検索..." oninput="doSearch()" autocomplete="off">
         <button class="btn-clear" onclick="clrSearch()">クリア</button>
       </div>
-      <div id="statusBar" class="status"></div>
       <div id="rl"></div>
     </div>
-
     <div class="panel">
       <div class="sl">買取リスト</div>
       <div id="cartArea"><div class="empty">カードを検索して追加してください</div></div>
@@ -141,7 +145,6 @@ canvas#sc{display:block;touch-action:none;cursor:crosshair;width:100%;height:200
     </div>
   </div>
 
-  <!-- PAGE 2 -->
   <div id="pg2" style="display:none">
     <div class="panel">
       <div class="sl">買取内容確認</div>
@@ -168,7 +171,6 @@ canvas#sc{display:block;touch-action:none;cursor:crosshair;width:100%;height:200
     </div>
   </div>
 
-  <!-- PAGE 3 -->
   <div id="pg3" style="display:none">
     <div class="panel">
       <div class="sl">買取規約</div>
@@ -202,7 +204,6 @@ canvas#sc{display:block;touch-action:none;cursor:crosshair;width:100%;height:200
     </div>
   </div>
 
-  <!-- PAGE 4 -->
   <div id="pg4" style="display:none">
     <div class="panel">
       <div class="done-box">
@@ -223,78 +224,107 @@ canvas#sc{display:block;touch-action:none;cursor:crosshair;width:100%;height:200
       <div class="rcpt" id="rcpt" style="display:none"></div>
     </div>
   </div>
-
 </div>
 
 <script>
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbxg-sBSivSjEWM8k2IaHdXu7ohF3OE8Zgwb8f5CQRqidSfBO0L6nbWvyUwEQwODJXm1/exec';
-const CONDS = ['A','A-','B','B-','C'];
-let cart = [], signDone = false, drawing = false, ctx;
-let searchTimer = null, cbCount = 0;
+const GAS_URL   = 'https://script.google.com/macros/s/AKfycbxg-sBSivSjEWM8k2IaHdXu7ohF3OE8Zgwb8f5CQRqidSfBO0L6nbWvyUwEQwODJXm1/exec';
+const CACHE_KEY = 'toreca_products_v1';
+const CACHE_TTL = 6 * 60 * 60 * 1000; // 6時間
+const CONDS     = ['A','A-','B','B-','C'];
+
+let allProducts = [];
+let cart = [], signDone = false, drawing = false, ctx, cbCount = 0;
 
 setInterval(()=>{ document.getElementById('clk').textContent = new Date().toLocaleTimeString('ja-JP'); }, 1000);
 document.getElementById('clk').textContent = new Date().toLocaleTimeString('ja-JP');
 
 function jsonp(url){
   return new Promise((resolve, reject)=>{
-    const cbName = '__gasCb' + (cbCount++);
-    const script = document.createElement('script');
-    const timer = setTimeout(()=>{ cleanup(); reject(new Error('timeout')); }, 10000);
-    window[cbName] = (data)=>{ cleanup(); resolve(data); };
-    function cleanup(){ clearTimeout(timer); delete window[cbName]; if(script.parentNode) script.parentNode.removeChild(script); }
-    script.onerror = ()=>{ cleanup(); reject(new Error('script error')); };
-    script.src = url + (url.includes('?')?'&':'?') + 'callback=' + cbName;
-    document.head.appendChild(script);
+    const name = '__cb' + (cbCount++);
+    const el   = document.createElement('script');
+    const t    = setTimeout(()=>{ cleanup(); reject(new Error('timeout')); }, 30000);
+    window[name] = d => { cleanup(); resolve(d); };
+    function cleanup(){ clearTimeout(t); delete window[name]; el.parentNode && el.parentNode.removeChild(el); }
+    el.onerror = ()=>{ cleanup(); reject(new Error('load error')); };
+    el.src = url + (url.includes('?')? '&':'?') + 'callback=' + name;
+    document.head.appendChild(el);
   });
 }
 
-function setStatus(msg, type){
-  const el = document.getElementById('statusBar');
-  if(!msg){ el.style.display='none'; return; }
-  el.className = 'status ' + (type||'loading');
-  el.textContent = msg;
-  el.style.display = 'block';
+function setBar(state, html){
+  const b = document.getElementById('cacheBar');
+  b.className = 'cache-bar ' + state;
+  document.getElementById('cacheMsg').innerHTML = html;
 }
 
-function onSearch(){
-  clearTimeout(searchTimer);
-  searchTimer = setTimeout(doSearch, 350);
-}
+async function loadAllProducts(force){
+  // キャッシュ確認
+  if(!force){
+    try{
+      const raw = localStorage.getItem(CACHE_KEY);
+      if(raw){
+        const { data, ts } = JSON.parse(raw);
+        if(Date.now() - ts < CACHE_TTL && data.length){
+          allProducts = data;
+          const m = Math.floor((Date.now()-ts)/60000);
+          const ago = m < 60 ? m+'分前' : Math.floor(m/60)+'時間前';
+          setBar('ok', `<span class="cache-count">${data.length}件</span>読み込み済み（${ago}更新）`);
+          return;
+        }
+      }
+    } catch(e){}
+  }
 
-async function doSearch(){
-  const q = document.getElementById('sq').value.trim();
-  const rl = document.getElementById('rl');
-  if(!q){ rl.innerHTML=''; setStatus(''); return; }
-  setStatus('検索中...');
-  rl.innerHTML = '';
+  setBar('loading', 'GASからデータを取得中...');
   try{
-    const data = await jsonp(GAS_URL + '?action=searchProducts&query=' + encodeURIComponent(q));
-    setStatus('');
-    if(data.error){ setStatus('エラー: ' + data.error, 'error'); return; }
-    renderResults(data.products || []);
+    const d = await jsonp(GAS_URL + '?action=getAllProducts');
+    if(d.products && d.products.length){
+      allProducts = d.products;
+      try{ localStorage.setItem(CACHE_KEY, JSON.stringify({ data: allProducts, ts: Date.now() })); } catch(e){}
+      setBar('ok', `<span class="cache-count">${allProducts.length}件</span>取得完了`);
+    } else {
+      setBar('error', 'データが空です。GASの設定を確認してください。');
+    }
   } catch(e){
-    setStatus('取得できませんでした。ネットワークを確認してください。', 'error');
+    // 失敗時は期限切れキャッシュでも使う
+    try{
+      const raw = localStorage.getItem(CACHE_KEY);
+      if(raw){
+        const { data } = JSON.parse(raw);
+        if(data.length){ allProducts = data; setBar('error', `取得失敗（キャッシュ <span class="cache-count">${data.length}件</span> で動作中）`); return; }
+      }
+    } catch(e2){}
+    setBar('error', '取得失敗。ネットワークを確認してください。');
   }
 }
 
-function renderResults(products){
+function doSearch(){
+  const q  = document.getElementById('sq').value.trim().toLowerCase();
   const rl = document.getElementById('rl');
-  if(!products.length){
-    rl.innerHTML = '<div class="rw"><div style="padding:16px;font-size:14px;color:#bbb;text-align:center">見つかりませんでした</div></div>';
+  if(!q){ rl.innerHTML=''; return; }
+  if(!allProducts.length){
+    rl.innerHTML='<div class="rw"><div class="no-result">データ読み込み中です。しばらくお待ちください。</div></div>';
     return;
   }
-  rl.innerHTML = '<div class="rw">' + products.slice(0,50).map(c=>`
-    <div class="ri" onclick='addCard(${JSON.stringify({name:c.name,code:c.code||"",price:Number(c.price),category:c.category||""})})'>
+  const hits = allProducts.filter(c =>
+    c.name.toLowerCase().includes(q) || (c.code && c.code.toLowerCase().includes(q))
+  );
+  if(!hits.length){
+    rl.innerHTML='<div class="rw"><div class="no-result">見つかりませんでした</div></div>';
+    return;
+  }
+  rl.innerHTML='<div class="rw">'+hits.slice(0,50).map(c=>`
+    <div class="ri">
       <div style="flex:1">
         <div class="rn">${c.name}</div>
         <div class="rc">${[c.code,c.category].filter(Boolean).join('　')}</div>
       </div>
       <span class="rp" style="margin-right:12px">¥${Number(c.price).toLocaleString()}</span>
-      <button class="ab" onclick='event.stopPropagation();addCard(${JSON.stringify({name:c.name,code:c.code||"",price:Number(c.price),category:c.category||""})})'>＋ 追加</button>
-    </div>`).join('') + '</div>';
+      <button class="ab" onclick='addCard(${JSON.stringify({name:c.name,code:c.code||"",price:Number(c.price),category:c.category||""})})'>＋ 追加</button>
+    </div>`).join('')+'</div>';
 }
 
-function clrSearch(){ document.getElementById('sq').value=''; document.getElementById('rl').innerHTML=''; setStatus(''); }
+function clrSearch(){ document.getElementById('sq').value=''; document.getElementById('rl').innerHTML=''; }
 
 function addCard(c){
   cart.push({...c, qty:1, cond:'A', editPrice:c.price, memo:'', uid:Date.now()+Math.random()});
@@ -309,10 +339,10 @@ function renderCart(){
   const tb = document.getElementById('totalBar');
   const nb = document.getElementById('toConf');
   if(!cart.length){
-    el.innerHTML = '<div class="empty">カードを検索して追加してください</div>';
+    el.innerHTML='<div class="empty">カードを検索して追加してください</div>';
     tb.style.display='none'; nb.disabled=true; return;
   }
-  el.innerHTML = cart.map((c,i)=>`
+  el.innerHTML=cart.map((c,i)=>`
     <div class="ci">
       <div class="ci-top">
         <div style="flex:1">
@@ -350,9 +380,8 @@ function renderCart(){
         </div>
       </div>
     </div>`).join('');
-  document.getElementById('tamt').textContent = grandTotal().toLocaleString();
-  tb.style.display = 'flex';
-  nb.disabled = false;
+  document.getElementById('tamt').textContent=grandTotal().toLocaleString();
+  tb.style.display='flex'; nb.disabled=false;
 }
 
 function setCond(i,v){ cart[i].cond=v; renderCart(); }
@@ -362,7 +391,7 @@ function setPrice(i,v){ cart[i].editPrice=Math.max(0,parseInt(v)||0); document.g
 function setMemo(i,v){ cart[i].memo=v; }
 
 function goConf(){
-  document.getElementById('confBody').innerHTML = cart.map(c=>`<tr>
+  document.getElementById('confBody').innerHTML=cart.map(c=>`<tr>
     <td><div style="font-size:13px;font-weight:600">${c.name}</div>${c.code?`<div style="font-size:11px;color:#bbb">${c.code}</div>`:''}</td>
     <td><span class="cond-badge">${c.cond}</span></td>
     <td style="text-align:right">${c.qty}枚</td>
@@ -370,76 +399,66 @@ function goConf(){
     <td style="text-align:right;font-weight:700">¥${subtotal(c).toLocaleString()}</td>
     <td style="font-size:12px;color:#888;font-style:italic">${c.memo||'—'}</td>
   </tr>`).join('');
-  document.getElementById('confTotal').textContent = grandTotal().toLocaleString();
+  document.getElementById('confTotal').textContent=grandTotal().toLocaleString();
   goPage(2);
 }
 
 function goPage(n){
   [1,2,3,4].forEach(i=>{
-    document.getElementById('pg'+i).style.display = i===n ? 'block':'none';
-    const s = document.getElementById('st'+i);
-    s.className = 'step' + (i===n?' active':i<n?' done':'');
+    document.getElementById('pg'+i).style.display=i===n?'block':'none';
+    document.getElementById('st'+i).className='step'+(i===n?' active':i<n?' done':'');
   });
   if(n===3) initCanvas();
   window.scrollTo(0,0);
 }
 
 function initCanvas(){
-  const canvas = document.getElementById('sc');
-  const w = canvas.offsetWidth || 860;
-  canvas.width = w * 2;
-  canvas.height = 400;
-  canvas.style.height = '200px';
-  ctx = canvas.getContext('2d');
+  const cv=document.getElementById('sc');
+  const w=cv.offsetWidth||860;
+  cv.width=w*2; cv.height=400; cv.style.height='200px';
+  ctx=cv.getContext('2d');
   ctx.scale(2,2);
-  ctx.strokeStyle = '#4B1528';
-  ctx.lineWidth = 2.5;
-  ctx.lineCap = 'round';
-  ctx.lineJoin = 'round';
-  canvas.onpointerdown = e=>{
+  ctx.strokeStyle='#4B1528'; ctx.lineWidth=2.5; ctx.lineCap='round'; ctx.lineJoin='round';
+  cv.onpointerdown=e=>{
     drawing=true; e.preventDefault();
-    const r=canvas.getBoundingClientRect(), sc=canvas.width/(2*r.width);
-    ctx.beginPath(); ctx.moveTo((e.clientX-r.left)*sc,(e.clientY-r.top)*sc);
+    const r=cv.getBoundingClientRect(),s=cv.width/(2*r.width);
+    ctx.beginPath(); ctx.moveTo((e.clientX-r.left)*s,(e.clientY-r.top)*s);
   };
-  canvas.onpointermove = e=>{
+  cv.onpointermove=e=>{
     if(!drawing) return; e.preventDefault();
-    const r=canvas.getBoundingClientRect(), sc=canvas.width/(2*r.width);
-    ctx.lineTo((e.clientX-r.left)*sc,(e.clientY-r.top)*sc); ctx.stroke();
-    signDone=true;
-    document.getElementById('sh').style.display='none';
-    chkSign();
+    const r=cv.getBoundingClientRect(),s=cv.width/(2*r.width);
+    ctx.lineTo((e.clientX-r.left)*s,(e.clientY-r.top)*s); ctx.stroke();
+    signDone=true; document.getElementById('sh').style.display='none'; chkSign();
   };
-  canvas.onpointerup = canvas.onpointerleave = ()=>{ drawing=false; };
+  cv.onpointerup=cv.onpointerleave=()=>{ drawing=false; };
 }
 
 function clrSign(){
   if(!ctx) return;
-  const c = document.getElementById('sc');
-  ctx.clearRect(0,0,c.width/2,c.height/2);
-  signDone=false;
-  document.getElementById('sh').style.display='block';
-  chkSign();
+  const cv=document.getElementById('sc');
+  ctx.clearRect(0,0,cv.width/2,cv.height/2);
+  signDone=false; document.getElementById('sh').style.display='block'; chkSign();
 }
 
 function chkSign(){
-  document.getElementById('finBtn').disabled = !(document.getElementById('agr').checked && signDone);
+  document.getElementById('finBtn').disabled=!(document.getElementById('agr').checked&&signDone);
 }
 
 function finish(){
-  document.getElementById('finalAmt').textContent = grandTotal().toLocaleString();
+  document.getElementById('finalAmt').textContent=grandTotal().toLocaleString();
   goPage(4);
 }
 
 function doPrint(){
-  const now = new Date();
-  const ds = `${now.getFullYear()}/${String(now.getMonth()+1).padStart(2,'0')}/${String(now.getDate()).padStart(2,'0')} ${now.toLocaleTimeString('ja-JP')}`;
-  const total = grandTotal();
-  const lines = cart.map(c=>{
-    const nm = c.name.length>13 ? c.name.slice(0,12)+'…' : c.name;
+  const now=new Date();
+  const ds=`${now.getFullYear()}/${String(now.getMonth()+1).padStart(2,'0')}/${String(now.getDate()).padStart(2,'0')} ${now.toLocaleTimeString('ja-JP')}`;
+  const total=grandTotal();
+  const lines=cart.map(c=>{
+    const nm=c.name.length>13?c.name.slice(0,12)+'…':c.name;
     return `${nm}${c.code?' ['+c.code+']':''}\n  状態:${c.cond}　${c.qty}枚　¥${c.editPrice.toLocaleString()} → ¥${subtotal(c).toLocaleString()}${c.memo?'\n  └ '+c.memo:''}`;
   }).join('\n');
-  document.getElementById('rcpt').style.display = 'block';
-  document.getElementById('rcpt').textContent =
+  document.getElementById('rcpt').style.display='block';
+  document.getElementById('rcpt').textContent=
 `━━━━━━━━━━━━━━━━━━━━━━━━━
       トレカデイズ　買取レシート
 ━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -451,10 +470,9 @@ ${lines}
 ━━━━━━━━━━━━━━━━━━━━━━━━━
   サイン確認済み
   ご利用ありがとうございました`;
-  const pn = document.getElementById('pnote');
-  pn.style.display = 'block';
-  pn.textContent = 'エプソン ePOS-Print APIへ送信中...';
-  setTimeout(()=>{ pn.textContent = '✓ 送信完了。プリンターをご確認ください。'; }, 1800);
+  const pn=document.getElementById('pnote');
+  pn.style.display='block'; pn.textContent='エプソン ePOS-Print APIへ送信中...';
+  setTimeout(()=>{ pn.textContent='✓ 送信完了。プリンターをご確認ください。'; },1800);
 }
 
 function resetAll(){
@@ -462,9 +480,10 @@ function resetAll(){
   document.getElementById('sq').value='';
   document.getElementById('rl').innerHTML='';
   document.getElementById('agr').checked=false;
-  renderCart();
-  goPage(1);
+  renderCart(); goPage(1);
 }
+
+loadAllProducts();
 </script>
 </body>
 </html>
